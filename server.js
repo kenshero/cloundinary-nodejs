@@ -11,6 +11,7 @@ app.set('trust proxy', 1);
 app.use(session({secret: 'ssshhhhh'}));
 
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var url = 'mongodb://localhost:27017/wishlist';
 
 app.use(express.static(__dirname + '/public'));
@@ -50,10 +51,19 @@ app.get('/getallWish',checkLogin,function(req,res){
 		id_user : req.session.idUser
 	}
 
-	lists.find(find).toArray(function(err,docs) {
-	  if(err)
-	  	throw err;
-	  res.send(docs);
+	var findMem = {
+		_id :new ObjectID(req.session.idUser)
+	};
+
+	members.findOne(findMem, function(err, result) {
+
+		lists.find(find).toArray(function(err,docs) {
+		  if(err)
+		  	throw err;
+		  docs.push(result);
+		  res.send(docs);
+		});	
+
 	});
 
 });
@@ -120,6 +130,46 @@ app.post('/addWish',checkLogin,function(req,res){
 
 });
 
+app.delete('/deleteWish/:id_wish',function(req,res){
+	console.log(req.params.id_wish);
+
+	var id_wish = {
+		_id : new  ObjectID(req.params.id_wish)
+	};
+
+	lists.remove(id_wish, function(err, result) {
+		if (err)
+			throw err;
+		res.send(result);
+	});    
+
+});
+
+app.post('/editWish',function(req,res){
+	console.log(req.body);
+	console.log(req.body._id);
+	var find={};
+	var newData={};
+
+	if (req.body._id)
+		find._id = new ObjectID(req.body._id);
+
+	if (req.body.name_wish)
+		newData.name_wish=req.body.name_wish
+
+	if (req.body.price_wish)
+		newData.price_wish=req.body.price_wish
+
+	if (req.body.id_user)
+		newData.id_user=req.body.id_user
+
+	lists.update(find,{'$set' : newData} ,function(err,result){
+		if(err)
+			throw err;
+		res.send(result);
+	});
+
+});
 
 function checkLogin(req, res, next) {
     if (req.session.idUser != null)

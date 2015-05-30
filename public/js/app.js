@@ -25,22 +25,29 @@ myApp.controller('WishCtrl',['$scope','Wish',function($scope,Wish){
 	getWish();
 
 	function getWish(){
-
 		Wish.getWish(function(data){
+      $scope.username = data[data.length-1];
 			$scope.wishs = data;
-			console.log(data);
+      $scope.wishs.splice($scope.wishs.length-1,1);
 		});
-
 	}
 
-	console.log($scope.wishs);
-
 	$scope.add = function(username,price){
-
 		Wish.addWish(username,price,function(data){
 			getWish();	
 		});
-
 	}
+
+  $scope.del = function(index){
+    Wish.delWish(index,function(data){
+      getWish();  
+    });
+  }
+
+  $scope.edit = function(editWish){
+    Wish.editWish(editWish,function(data){
+      getWish();  
+    });
+  }
 
 }]);

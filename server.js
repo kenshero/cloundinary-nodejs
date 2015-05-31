@@ -22,12 +22,6 @@ app.use(express.static(__dirname + '/public'));
 var members = null ;
 var lists = null ;
 
-cloudinary.config({ 
-  cloud_name: 'reviewbook', 
-  api_key: '679694477186338', 
-  api_secret: '4MQmZM0nlkRuaaO-WbpnR4zPlgs' 
-});
-
 MongoClient.connect(url, function(err, db) {
 
 	members = db.collection('member');
@@ -176,6 +170,12 @@ app.post('/editWish',function(req,res){
 		res.send(result);
 	});
 
+});
+
+cloudinary.config({ 
+  cloud_name: 'reviewbook', 
+  api_key: '679694477186338', 
+  api_secret: '4MQmZM0nlkRuaaO-WbpnR4zPlgs' 
 });
 
 function checkLogin(req, res, next) {

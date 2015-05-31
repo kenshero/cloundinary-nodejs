@@ -1,0 +1,24 @@
+{
+  "name": "authen-midterm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express-session": "^1.11.2",
+    "express": "^4.12.4",
+    "body-parser": "^1.12.4",
+    "install": "^0.1.8",
+    "mongodb": "^2.0.33"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://kenshero@bitbucket.org/kenshero/authen-ui-router.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

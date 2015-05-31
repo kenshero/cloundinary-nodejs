@@ -1,16 +1,9 @@
-<form class="form-inline">
 
-  <div class="form-group">
-    <label class="sr-only" >Username</label>
-    <input type="text" class="form-control" ng-model="user" placeholder="Enter Name">
-  </div>
+<form class="form-inline" method="POST" action="uploadImg" enctype="multipart/form-data">
 
-  <div class="form-group">
-    <label class="sr-only" >Password</label>
-    <input type="text" class="form-control" ng-model="pwd" placeholder="Price">
-  </div>
+  <input type="file" class="form-control" name="img">
 
-  <button type="submit" class="btn btn-default" ng-click="add(user,pwd)">Add</button>
+  <button type="submit" class="btn btn-default">UpImg</button>
 
 </form>
 
@@ -18,15 +11,14 @@
   <tr>
     <thead>
       <th>No.</th>
-      <th>Name</th>
-      <th>Price</th>
+      <th>Img</th>
       <th>Tools</th>
     </thead>
   </tr>
+
   <tr ng-repeat="wish in wishs">
     <td>{{$index+1}}</td>
-    <td><input type="text" ng-model="wish.name_wish"  ng-blur="edit(wish)"/></td>
-    <td><input type="text" ng-model="wish.price_wish" ng-blur="edit(wish)"/></td>
+    <td><img src="{{wish.url_img}}" width="150px" height="150px"></td>
     <td>
       <button type="button" class="btn btn-danger" ng-click="del(wish._id)">Delete</button>        
     </td>

@@ -32,12 +32,6 @@ myApp.controller('WishCtrl',['$scope','Wish',function($scope,Wish){
 		});
 	}
 
-	$scope.add = function(username,price){
-		Wish.addWish(username,price,function(data){
-			getWish();	
-		});
-	}
-
   $scope.del = function(index){
     Wish.delWish(index,function(data){
       getWish();  

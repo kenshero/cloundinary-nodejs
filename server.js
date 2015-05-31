@@ -3,7 +3,10 @@ var app = express();
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path    = require("path");
+var cloudinary = require('cloudinary');
 
+var multer  = require('multer');
+app.use(multer({ dest: './uploads/'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -19,10 +22,16 @@ app.use(express.static(__dirname + '/public'));
 var members = null ;
 var lists = null ;
 
+cloudinary.config({ 
+  cloud_name: 'reviewbook', 
+  api_key: '679694477186338', 
+  api_secret: '4MQmZM0nlkRuaaO-WbpnR4zPlgs' 
+});
+
 MongoClient.connect(url, function(err, db) {
 
 	members = db.collection('member');
-	lists   = db.collection('list');
+	lists   = db.collection('imgs');
 	app.listen(3000);
 	console.log("connected  port : 3000 ");
 
@@ -112,22 +121,20 @@ app.post('/register', function(req,res){
 
 });
 
-app.post('/addWish',checkLogin,function(req,res){
-
-	console.log(req.body.wish);
+app.post('/uploadImg',checkLogin,function(req,res){
+	cloudinary.uploader.upload(req.files.img.path,function(result) { 
 	
 	var wish = {
-		name_wish  : req.body.wish.name,
-		price_wish : req.body.wish.price,
+		url_img    : result.url,
 		id_user	   : req.session.idUser
-	};
+	};	
 
-	lists.insert(wish,function(err, result) {
-		if(err)
-			throw err;
-		res.send(result);
-	});	
-
+		lists.insert(wish,function(err, result) {
+			if(err)
+				throw err;
+			res.redirect('/home');
+		});		
+	});
 });
 
 app.delete('/deleteWish/:id_wish',function(req,res){
